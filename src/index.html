@@ -3,8 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <title>TN Covid Beds Map</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" type="text/css" href="./main.css">
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <style>
+      #map {
+        height: 100%;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   </head>
@@ -13,36 +26,36 @@
     <div id="map"></div>
     <div id="poweredby">Powered By <a target="_blank" href="https://about.me/prashanthrv">Half Buddha Creations</a></div>
     <script type="text/javascript" type="module">
-    	var map = L.map('map', {
-		    center: [11.388, 80.750],
-		    zoom: 7
-		});
-		L.tileLayer(
-		'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-		).addTo(map);
+      var map = L.map("map", {
+        center: [11.388, 80.75],
+        zoom: 7
+      });
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+        map
+      );
     </script>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
-	<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
 
-	<!-- TODO: Add SDKs for Firebase products that you want to use
+    <!-- TODO: Add SDKs for Firebase products that you want to use
 	     https://firebase.google.com/docs/web/setup#available-libraries -->
-	<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
 
-	<script>
-	  // Your web app's Firebase configuration
-	  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-	  var firebaseConfig = {
-	    apiKey: "AIzaSyCBkBtVWrWisISnECdMP1LTID5E4xbkTOY",
-	    authDomain: "covid-resource-314307.firebaseapp.com",
-	    projectId: "covid-resource-314307",
-	    storageBucket: "covid-resource-314307.appspot.com",
-	    messagingSenderId: "1018984797",
-	    appId: "1:1018984797:web:7ea9197dd31169419bd0b4",
-	    measurementId: "G-DH7YEELKK5"
-	  };
-	  // Initialize Firebase
-	  firebase.initializeApp(firebaseConfig);
-	  firebase.analytics();
-	</script>
+    <script>
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      var firebaseConfig = {
+        apiKey: "AIzaSyCBkBtVWrWisISnECdMP1LTID5E4xbkTOY",
+        authDomain: "covid-resource-314307.firebaseapp.com",
+        projectId: "covid-resource-314307",
+        storageBucket: "covid-resource-314307.appspot.com",
+        messagingSenderId: "1018984797",
+        appId: "1:1018984797:web:7ea9197dd31169419bd0b4",
+        measurementId: "G-DH7YEELKK5"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+    </script>
   </body>
 </html>
