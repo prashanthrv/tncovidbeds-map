@@ -2,9 +2,9 @@
   "name": "tncovidbeds-map",
   "version": "1.0.0",
   "description": "Geometrical representation of tn covid beds availability",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "parcel serve ./src/index.html",
+    "build": "parcel build ./src/index.html"
   },
   "repository": {
     "type": "git",
