@@ -1,0 +1,26 @@
+{
+  "name": "tncovidbeds-map",
+  "version": "1.0.0",
+  "description": "Geometrical representation of tn covid beds availability",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prashanthrv/tncovidbeds-map.git"
+  },
+  "author": "Prashanth R",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/prashanthrv/tncovidbeds-map/issues"
+  },
+  "homepage": "https://github.com/prashanthrv/tncovidbeds-map#readme",
+  "dependencies": {
+    "alpinejs": "^2.8.2"
+  },
+  "devDependencies": {
+    "cssnano": "^5.0.3",
+    "postcss": "^8.2.15"
+  }
+}
