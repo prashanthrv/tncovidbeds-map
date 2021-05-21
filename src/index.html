@@ -99,7 +99,7 @@
     </style>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script type="text/javascript" type="module">
     	window.filterData = {
     		oxygen_supported: true,
@@ -190,7 +190,31 @@
     	<button class="bg-blue-500 p-1 text-white rounded shadow-md mt-2" onclick="callFilter()">Apply</button>
     	<button class="bg-red-500 p-1 text-white rounded shadow-md mt-2 ml-2" onclick="closeFilter()">Close</button>
     </div>
-    <div id="poweredby" class="underline text-blue-500">Powered By <a target="_blank" href="https://about.me/prashanthrv">Half Buddha Creations</a></div>
+    <div id="poweredby" class="underline text-blue-500">Data sourced from <a target="_blank" href="https://tnega.tn.gov.in/">TNEGA</a></div>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+	     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+    
+    <script src="https://unpkg.com/realm-web@1.2.0/dist/bundle.iife.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      var firebaseConfig = {
+        apiKey: "AIzaSyCBkBtVWrWisISnECdMP1LTID5E4xbkTOY",
+        authDomain: "covid-resource-314307.firebaseapp.com",
+        projectId: "covid-resource-314307",
+        storageBucket: "covid-resource-314307.appspot.com",
+        messagingSenderId: "1018984797",
+        appId: "1:1018984797:web:7ea9197dd31169419bd0b4",
+        measurementId: "G-DH7YEELKK5"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+    </script>
     <script type="text/javascript" type="module">
       window.closeHospital = function(){
       	$('.hospitalInfo').hide();
@@ -273,22 +297,16 @@
 			})      	
       }
 
-      $.ajax({
-      	method:'post',
-      	url: 'https://tncovidbeds.tnega.org/api/hospitals',
-      	data: JSON.stringify(params),
-      	contentType: "application/json",
-      	dataType: "json",
-      	success: function(data){
-      		window.hospitalData=[]
-      		data.result.forEach((hospital, index)=>{
-      			window.hospitalData.push(hospital)
-      			if(index===(data.result.length-1)){
-      				window.showHospitalData();
-      			}
-      		})
-      	}
-      });
+      const app = new Realm.App({ id: "tncovidresource-wvjzp" });
+      const credentials = Realm.Credentials.apiKey("An0lsNjTyVQtGNOJ1mD9EdKWYKeeTbMIM8H8R1dG2AKMzx1b9fSgG72iv67C7pFF");
+	    app.logIn(credentials).then(function(user){
+	    	const mongodb = app.currentUser.mongoClient("mongodb-atlas");
+	    	const hospitalCollection = mongodb.db("covidresource").collection("tn_hospital_locations");
+	    	hospitalCollection.find().then(function(hospitalList){
+	    		window.hospitalData = hospitalList
+	    		window.showHospitalData();
+	    	})
+	    })
     </script>
   </body>
 </html>
