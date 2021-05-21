@@ -2,11 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TN Covid Beds Map</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     />
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet"> 
     <style>
       #map {
         height: 100%;
@@ -16,30 +20,109 @@
         height: 100%;
         margin: 0;
         padding: 0;
+        font-family: 'Roboto', sans-serif;
+      }
+      #poweredby{
+      	position: fixed;
+		z-index: 999;
+		bottom: 3px;
+		right: 50px;
+		font-size: 12px;
+      }
+      .green-icon{
+      	height: 17px !important;
+      	width: 17px !important;
+      	border-radius: 50%;
+      	background-color: green;
+      }
+      .hospitalInfo{
+      	z-index: 999;
+		position: absolute;
+		top: 20px;
+		height: auto;
+		width: 300px;
+		right: 20px;
+		margin-bottom: 20px;
+		max-height: 90%;
+      }
+      .bedsInfo{
+      	width:100%;
+      }
+      .bedsInfo tr{
+      	margin-bottom: 15px;
       }
     </style>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
+    <!-- <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script> -->
+	<!-- <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script> -->
+	<!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+	<script type="text/javascript" type="module">
+    	window.filterData = {
+    		oxygen_supported: true,
+    		non_oxygen_supported: true,
+    		icu_beds: true,
+    		show_only_vacant: true
+    	}
+    </script>
   </head>
 
   <body>
     <div id="map"></div>
+    <div style="display: none;" class="hospitalInfo">
+    	<div class="shadow-md rounded bg-blue-500 text-white p-4">
+    		<div id="institution" class="text-xl"></div>
+	    	<div id="address" class="mt-1"></div>
+	    	<div id="contact" class="mt-1">
+	    		<a href="" class="underline"></a>
+	    	</div>
+    	</div>
+    	<div class="shadow-md rounded bg-white p-4 mt-2">
+    		<table class="bedsInfo">
+    			<tbody>
+    				<tr>
+	    				<td style="width:90%">
+	    					Oxygen Supported Beds
+	    				</td>
+	    				<td id="oxygen_supported" class="font-bold"></td>
+	    			</tr>
+	    			<tr>
+	    				<td style="width:90%">
+	    					Non Oxygen Supported Beds
+	    				</td>
+	    				<td id="non_oxygen_supported" class="font-bold"></td>
+	    			</tr>
+	    			<tr>
+	    				<td style="width:90%">
+	    					ICU Beds
+	    				</td>
+	    				<td id="icu_beds" class="font-bold"></td>
+	    			</tr>
+	    			<tr>
+	    				<td style="width:90%">
+	    					Ventilators
+	    				</td>
+	    				<td id="ventilators" class="font-bold"></td>
+	    			</tr>
+    			</tbody>
+    		</table>
+    	</div>
+    	<div class="shadow-md rounded bg-white p-4 mt-2">
+    		<div class="font-bold">Last Updated</div>
+    		<div id="lastUpdated"></div>
+    		<div class="font-bold mt-2">Remarks</div>
+    		<div id="remarks"></div>
+    	</div>
+    </div>
     <div id="poweredby">Powered By <a target="_blank" href="https://about.me/prashanthrv">Half Buddha Creations</a></div>
-    <script type="text/javascript" type="module">
-      var map = L.map("map", {
-        center: [11.388, 80.75],
-        zoom: 7
-      });
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-        map
-      );
-    </script>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
 
     <!-- TODO: Add SDKs for Firebase products that you want to use
 	     https://firebase.google.com/docs/web/setup#available-libraries -->
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
 
     <script>
       // Your web app's Firebase configuration
@@ -56,6 +139,65 @@
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
       firebase.analytics();
+    </script>
+    <script type="text/javascript" type="module">
+      var map = L.map("map", {
+        center: [11.388, 80.75],
+        zoom: 7
+      });
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+        map
+      );
+
+      const openHospitalPage = function(hospitalData){
+      	$('.hospitalInfo').show();
+      	$('#institution').text(hospitalData.institution)
+      	$('#address').text(hospitalData.map_address)
+      	$('#contact a').text(hospitalData.contact_number)
+      	$('#contact a').attr('href','tel:'+hospitalData.contact_number)
+
+      	$('#oxygen_supported').text(hospitalData.oxygen_supported_beds.vacant+"/"+hospitalData.oxygen_supported_beds.total)
+      	$('#non_oxygen_supported').text(hospitalData.non_oxygen_supported_beds.vacant+"/"+hospitalData.non_oxygen_supported_beds.total)
+      	$('#icu_beds').text(hospitalData.icu_beds.vacant+"/"+hospitalData.icu_beds.total)
+      	$('#ventilators').text(hospitalData.ventilators.vacant+"/"+hospitalData.ventilators.total)
+
+      	$('#lastUpdated').text(new Date(hospitalData.last_updated.seconds*1000))
+      	$('#remarks').text(hospitalData.remarks)
+      }
+
+	  firebase.firestore().collection('hospital_locations').get().then(function(hospitalList){
+	  	  const result = []
+		  hospitalList.forEach((doc) => {
+	        const hospital = doc.data()
+	        const myIcon = L.divIcon({className: 'green-icon'});
+	        const hospitalMarker = L.marker([hospital.location._lat, hospital.location._long], { icon: myIcon}).addTo(map)
+	        hospitalMarker.on('click', function(data){
+	        	openHospitalPage(hospital)
+	        })
+	      });
+	  })
+
+
+  //     var platform = new H.service.Platform({
+		//   'apikey': 'r871qmhkI8NPgwCoTqVM43vu1E_xW0mpXSp-5Ke7toc'
+		// });
+
+  //     // Get an instance of the geocoding service:
+		// var service = platform.getSearchService();
+
+		// // Call the geocode method with the geocoding parameters,
+		// // the callback and an error callback function (called if a
+		// // communication error occurs):
+		// service.geocode({
+		//   q: 'Ariyalur, Tamilnadu, India'
+		// }, (result) => {
+		//   // Add a marker for each location found
+		//   result.items.forEach((item) => {
+		//   	console.log(item)
+		//   	L.marker([item.position.lat, item.position.lng]).addTo(map)
+		//   });
+		// }, alert);
+
     </script>
   </body>
 </html>
