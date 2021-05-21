@@ -65,6 +65,37 @@
 		left: 10px;
 		bottom: 10px;
       }
+      .filterIcon{
+      	position: absolute;
+    	z-index: 99999;
+    	top: 80px;
+    	left: 10px;
+    	height: 30px;
+    	width: 30px;
+    	cursor: pointer;
+      }
+      .filterIcon img{
+      	height: 16px;
+		margin-top: 8px;
+		margin-left: 7px;
+      }
+      .filterBy{
+      	    position: absolute;
+		    z-index: 99999;
+		    top: 80px;
+		    left: 50px;
+		    height: auto;
+		    width: 250px;
+      }
+      .toggle-checkbox:checked {
+		  @apply: right-0 border-green-400;
+		  right: 0;
+		  border-color: #68D391;
+		}
+		.toggle-checkbox:checked + .toggle-label {
+		  @apply: bg-green-400;
+		  background-color: #68D391;
+		}
     </style>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -72,10 +103,11 @@
 	<script type="text/javascript" type="module">
     	window.filterData = {
     		oxygen_supported: true,
-    		non_oxygen_supported: true,
-    		icu_beds: true,
+    		non_oxygen_supported: false,
+    		icu_beds: false,
     		show_only_vacant: true
     	}
+    	window.hospitalData = []
     </script>
   </head>
 
@@ -125,17 +157,65 @@
     		<div id="lastUpdated"></div>
     	</div>
     </div>
+    <div class="filterIcon shadow-md rounded bg-white" onclick="openFilter()">
+    	<img src="/images/filter.png" />
+    </div>
+    <div class="filterBy shadow-md bg-white p-4 rounded" style="display: none;">
+    	<div class="mb-2">Filter By</div>
+
+    	<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+		    <input type="checkbox" checked name="oxygen_supported" id="oxygen_supported_check" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+		    <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+		</div>
+		<label for="toggle" class="text-xs text-gray-700 mb-4">Show Oxygen Supported Beds</label><br/>
+
+		<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+		    <input type="checkbox" name="non_oxygen_supported" id="non_oxygen_supported_check" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+		    <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+		</div>
+		<label for="toggle" class="text-xs text-gray-700 mb-4">Show Normal Beds</label><br/>
+
+		<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+		    <input type="checkbox" name="icu_beds" id="icu_beds_check" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+		    <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+		</div>
+		<label for="toggle" class="text-xs text-gray-700 mb-4">Show ICU Beds</label><br/>
+
+		<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+		    <input type="checkbox" checked name="show_only_vacant" id="show_only_vacant_check" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+		    <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+		</div>
+		<label for="toggle" class="text-xs text-gray-700 mb-4">Show only vacant beds</label><br/>
+
+    	<button class="bg-blue-500 p-1 text-white rounded shadow-md mt-2" onclick="callFilter()">Apply</button>
+    	<button class="bg-red-500 p-1 text-white rounded shadow-md mt-2 ml-2" onclick="closeFilter()">Close</button>
+    </div>
     <div id="poweredby" class="underline text-blue-500">Powered By <a target="_blank" href="https://about.me/prashanthrv">Half Buddha Creations</a></div>
     <script type="text/javascript" type="module">
       window.closeHospital = function(){
       	$('.hospitalInfo').hide();
       }
-      var map = L.map("map", {
+      window.openFilter = function(){
+		$('.filterBy').show();
+	  }
+	  window.closeFilter = function(){
+		$('.filterBy').hide();
+	  }
+	  window.callFilter = function(){
+		window.filterData.oxygen_supported = $('#oxygen_supported_check').prop('checked')
+		window.filterData.non_oxygen_supported = $('#non_oxygen_supported_check').prop('checked')
+		window.filterData.icu_beds = $('#icu_beds_check').prop('checked')
+		window.filterData.show_only_vacant = $('#show_only_vacant_check').prop('checked')
+		window.showHospitalData();
+		window.closeFilter();
+	  }
+      window.map = L.map("map", {
         center: [11.388, 80.75],
         zoom: 7
       });
+      window.layerGrp = L.layerGroup().addTo(window.map);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-        map
+        window.map
       );
 
       const openHospitalPage = function(hospitalData){
@@ -159,6 +239,40 @@
 
       const params = {"searchString":"","sortCondition":{"Name":1},"pageNumber":1,"pageLimit":2000,"SortValue":"Availability","ShowIfVacantOnly":"","IsGovernmentHospital":true,"IsPrivateHospital":true,"FacilityTypes":["CHO","CHC","CCC"]};
 
+      window.showHospitalData = function(){
+      		window.layerGrp.clearLayers();
+			window.hospitalData.forEach((hospital)=>{
+				if(hospital.Latitude!==undefined && hospital.Latitude!==null && hospital.Longitude!==undefined && hospital.Longitude!==null){
+					
+					const greenIcon = L.divIcon({className: 'green-icon'});
+	      			const redIcon = L.divIcon({className: 'red-icon'});
+	      			let myIcon = null;
+
+					if(window.filterData.show_only_vacant){
+						if((window.filterData.oxygen_supported && parseInt(hospital.CovidBedDetails.VaccantO2Beds)>0) || (window.filterData.non_oxygen_supported && parseInt(hospital.CovidBedDetails.VaccantNonO2Beds)>0) || (window.filterData.icu_beds && parseInt(hospital.CovidBedDetails.VaccantICUBeds)>0)){
+			 		       	myIcon = greenIcon
+			 		       	const hospitalMarker = L.marker([hospital.Latitude, hospital.Longitude], { icon: myIcon}).addTo(window.layerGrp)
+			      			hospitalMarker.on('click', function(data){
+					        	openHospitalPage(hospital)
+					        })
+			        	}
+					}
+					else{
+						if((window.filterData.oxygen_supported && parseInt(hospital.CovidBedDetails.VaccantO2Beds)>0) || (window.filterData.non_oxygen_supported && parseInt(hospital.CovidBedDetails.VaccantNonO2Beds)>0) || (window.filterData.icu_beds && parseInt(hospital.CovidBedDetails.VaccantICUBeds)>0)){
+			 		       	myIcon = greenIcon
+			        	}else{
+			        		myIcon = redIcon
+			        	}
+		      			const hospitalMarker = L.marker([hospital.Latitude, hospital.Longitude], { icon: myIcon}).addTo(window.layerGrp)
+		      			hospitalMarker.on('click', function(data){
+				        	openHospitalPage(hospital)
+				        })
+					}
+	      			
+      			}
+			})      	
+      }
+
       $.ajax({
       	method:'post',
       	url: 'https://tncovidbeds.tnega.org/api/hospitals',
@@ -166,20 +280,11 @@
       	contentType: "application/json",
       	dataType: "json",
       	success: function(data){
-      		data.result.forEach((hospital)=>{
-      			if(hospital.Latitude!==undefined && hospital.Latitude!==null && hospital.Longitude!==undefined && hospital.Longitude!==null){
-      				const greenIcon = L.divIcon({className: 'green-icon'});
-	      			const redIcon = L.divIcon({className: 'red-icon'});
-	      			let myIcon = null;
-	      			if(parseInt(hospital.CovidBedDetails.VaccantO2Beds)>0 || parseInt(hospital.CovidBedDetails.VaccantNonO2Beds)>0 || parseInt(hospital.CovidBedDetails.VaccantICUBeds)>0){
-		 		       	myIcon = greenIcon
-		        	}else{
-		        		myIcon = redIcon
-		        	}
-	      			const hospitalMarker = L.marker([hospital.Latitude, hospital.Longitude], { icon: myIcon}).addTo(map)
-	      			hospitalMarker.on('click', function(data){
-			        	openHospitalPage(hospital)
-			        })
+      		window.hospitalData=[]
+      		data.result.forEach((hospital, index)=>{
+      			window.hospitalData.push(hospital)
+      			if(index===(data.result.length-1)){
+      				window.showHospitalData();
       			}
       		})
       	}
