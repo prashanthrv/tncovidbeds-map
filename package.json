@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "start": "parcel serve ./src/index.html",
-    "build": "parcel build ./src/index.html"
+    "build": "parcel build ./src/index.html",
+    "bundle": "rollup --config rollup.config.js",
+    "function": "node ./netlify/functions/updateHospitals.js"
   },
   "repository": {
     "type": "git",
@@ -16,7 +18,12 @@
     "url": "https://github.com/prashanthrv/tncovidbeds-map/issues"
   },
   "homepage": "https://github.com/prashanthrv/tncovidbeds-map#readme",
-  "dependencies": {},
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dom-parser": "^0.1.6",
+    "firebase": "^8.6.2",
+    "firebase-admin": "^9.8.0"
+  },
   "devDependencies": {
     "cssnano": "^5.0.3",
     "parcel": "^2.0.0-beta.2",
