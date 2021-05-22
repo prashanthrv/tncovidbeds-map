@@ -18,7 +18,7 @@
 
   <div class="text-center">
     <i id="homeicon" class="pointer fa fa-home" style="display: none;" onclick="fnback()"></i>&nbsp&nbsp&nbsp
-    <span> TN Covid O2 Bed Availability Dashboard </span>
+    <span> TN Covid ICU Bed Availability Dashboard </span>
     <a href="/">Map View</a>
   </div>
 
@@ -162,8 +162,8 @@
                   data: 'District.Name'
                 },
                 {
-                  title: "o2 Beds Available",
-                  data: 'CovidBedDetails.VaccantO2Beds'
+                  title: "ICU Beds Available",
+                  data: 'CovidBedDetails.VaccantICUBeds'
                 },
               ],
               columnDefs: [
@@ -203,7 +203,7 @@
                 {
                   DistrictID: response.result[index]._id,
                   DistrictName: response.result[index].Name,
-                  AvailableO2Beds: response1.AvalilableO2Beds,
+                  AvailableICUBeds: response1.AvalilableICUBeds,
                   HospitalCount: response1.TotalCount,
                   HospitalNameList: response1.Hospitalnamelist,
                 }
@@ -224,8 +224,8 @@
                         width: "100px",
                       },
                       {
-                        title: "Available o2 Beds",
-                        data: 'AvailableO2Beds',
+                        title: "Available ICU Beds",
+                        data: 'AvailableICUBeds',
                         render: function (data, type, row, meta) {
                           var rownum = meta.row + 1
                           var buttonrowid = "i_viewbutton_" + rownum
@@ -309,8 +309,8 @@
                 },
 
                 {
-                  title: "Available o2 Beds",
-                  data: 'CovidBedDetails.VaccantO2Beds',
+                  title: "Available ICU Beds",
+                  data: 'CovidBedDetails.VaccantICUBeds',
                   width: "100px",
                 },
               ],
@@ -470,12 +470,12 @@
                 var name = ""
                 var i = 1
                 for (let index = 0; index < data.result.length; index++) {
-                  temp = temp + data.result[index].CovidBedDetails.VaccantO2Beds;
-                  if (data.result[index].CovidBedDetails.VaccantO2Beds !== 0) {
+                  temp = temp + data.result[index].CovidBedDetails.VaccantICUBeds;
+                  if (data.result[index].CovidBedDetails.VaccantICUBeds !== 0) {
                     if (name === "") {
-                      name = i + ". " + data.result[index].Name + " <span style='color: red;'>" + data.result[index].CovidBedDetails.VaccantO2Beds + "</span>";
+                      name = i + ". " + data.result[index].Name + " <span style='color: red;'>" + data.result[index].CovidBedDetails.VaccantICUBeds + "</span>";
                     } else {
-                      name = name + "<br>" + i + ". " + data.result[index].Name + " <span style='color: red;'>" + data.result[index].CovidBedDetails.VaccantO2Beds + "</span>";
+                      name = name + "<br>" + i + ". " + data.result[index].Name + " <span style='color: red;'>" + data.result[index].CovidBedDetails.VaccantICUBeds + "</span>";
                     }
                     i++;
                   }
@@ -483,7 +483,7 @@
                 var json =
                 {
                   TotalCount: hospitals.length,
-                  AvalilableO2Beds: temp,
+                  AvalilableICUBeds: temp,
                   Hospitalnamelist: name
                 }
                 callback(json);
@@ -619,17 +619,17 @@
         }
 
 
-        function fnback() {
+        window.fnback = function() {
           location.reload();
           hideElement(homeicon)
         }
 
 
-        function fnShare() {
+        window.fnShare = function() {
           var message = localStorage.getItem("wamessage")
           window.open('whatsapp://send?text=http://bit.ly/oxygenbedtamilnadu'+ "%0a" +  "%0a" +message);
         }
-        function funClickCount(elem) {
+        window.funClickCount = function(elem) {
           var districtid = $(elem).closest('tr').attr("districtid")
           destroyTable()
           showElement(homeicon)
@@ -643,7 +643,7 @@
             return value + ","
           }
         }
-        function funClickHospital(elem) {
+        window.funClickHospital = function(elem) {
           var hospitalid = $(elem).closest('tr').attr("id")
           var Name = $(elem).closest('tr').attr("Name")
           var BedsAllotedForCovidTreatment = $(elem).closest('tr').attr("BedsAllotedForCovidTreatment")
@@ -694,7 +694,7 @@
           $("#" + tableid).parents('div.dataTables_wrapper').first().hide()
           loaddataingrid(obj)
         }
-        function fnclose() {
+        window.fnclose = function() {
 
           $("#detail tr").remove()
           $("#" + tableid).parents('div.dataTables_wrapper').first().show()
