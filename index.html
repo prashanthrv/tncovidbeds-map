@@ -112,7 +112,7 @@
   </head>
 
   <body>
-  	<div class="title shadow-md rounded bg-white p-2">TN Covid Beds Availability</div>
+  	<div class="title shadow-md rounded bg-white p-2">TN Covid Beds Availability <a class="underline text-blue-500" href="/tableview/index.html">Table View</a></div>
     <div id="map"></div>
     <div style="display: none;" class="hospitalInfo">
     	<div class="shadow-md rounded bg-red-500 text-white p-1" style="float: right; width:30px; height: 30px; text-align:center; cursor:pointer" onclick="closeHospital()">
@@ -275,10 +275,12 @@
 					if(window.filterData.show_only_vacant){
 						if((window.filterData.oxygen_supported && parseInt(hospital.CovidBedDetails.VaccantO2Beds)>0) || (window.filterData.non_oxygen_supported && parseInt(hospital.CovidBedDetails.VaccantNonO2Beds)>0) || (window.filterData.icu_beds && parseInt(hospital.CovidBedDetails.VaccantICUBeds)>0)){
 			 		       	myIcon = greenIcon
-			 		       	const hospitalMarker = L.marker([hospital.Latitude, hospital.Longitude], { icon: myIcon}).addTo(window.layerGrp)
-			      			hospitalMarker.on('click', function(data){
-					        	openHospitalPage(hospital)
-					        })
+			 		       	if((window.filterData.oxygen_supported && parseInt(hospital.CovidBedDetails.AllotedO2Beds)>0) || (window.filterData.non_oxygen_supported && parseInt(hospital.CovidBedDetails.AllotedNonO2Beds)>0) || (window.filterData.icu_beds && parseInt(hospital.CovidBedDetails.AllotedICUBeds)>0)){
+                    const hospitalMarker = L.marker([hospital.Latitude, hospital.Longitude], { icon: myIcon}).addTo(window.layerGrp)
+                    hospitalMarker.on('click', function(data){
+                      openHospitalPage(hospital)
+                    })
+                  }
 			        	}
 					}
 					else{
@@ -287,10 +289,12 @@
 			        	}else{
 			        		myIcon = redIcon
 			        	}
-		      			const hospitalMarker = L.marker([hospital.Latitude, hospital.Longitude], { icon: myIcon}).addTo(window.layerGrp)
-		      			hospitalMarker.on('click', function(data){
-				        	openHospitalPage(hospital)
-				        })
+                if((window.filterData.oxygen_supported && parseInt(hospital.CovidBedDetails.AllotedO2Beds)>0) || (window.filterData.non_oxygen_supported && parseInt(hospital.CovidBedDetails.AllotedNonO2Beds)>0) || (window.filterData.icu_beds && parseInt(hospital.CovidBedDetails.AllotedICUBeds)>0)){
+                  const hospitalMarker = L.marker([hospital.Latitude, hospital.Longitude], { icon: myIcon}).addTo(window.layerGrp)
+                  hospitalMarker.on('click', function(data){
+                    openHospitalPage(hospital)
+                  })
+                }
 					}
 	      			
       			}
