@@ -102,9 +102,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script type="text/javascript" type="module">
     	window.filterData = {
-    		oxygen_supported: true,
+    		oxygen_supported: false,
     		non_oxygen_supported: false,
-    		icu_beds: false,
+    		icu_beds: true,
     		show_only_vacant: true
     	}
     	window.hospitalData = []
@@ -164,7 +164,7 @@
     	<div class="mb-2">Filter By</div>
 
     	<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-		    <input type="checkbox" checked name="oxygen_supported" id="oxygen_supported_check" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+		    <input type="checkbox" name="oxygen_supported" id="oxygen_supported_check" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
 		    <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
 		</div>
 		<label for="toggle" class="text-xs text-gray-700 mb-4">Show Oxygen Supported Beds</label><br/>
@@ -176,7 +176,7 @@
 		<label for="toggle" class="text-xs text-gray-700 mb-4">Show Normal Beds</label><br/>
 
 		<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-		    <input type="checkbox" name="icu_beds" id="icu_beds_check" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+		    <input type="checkbox" checked name="icu_beds" id="icu_beds_check" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
 		    <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
 		</div>
 		<label for="toggle" class="text-xs text-gray-700 mb-4">Show ICU Beds</label><br/>
