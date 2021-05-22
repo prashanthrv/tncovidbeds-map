@@ -619,17 +619,17 @@
         }
 
 
-        function fnback() {
+        window.fnback = function() {
           location.reload();
           hideElement(homeicon)
         }
 
 
-        function fnShare() {
+        window.fnShare = function() {
           var message = localStorage.getItem("wamessage")
           window.open('whatsapp://send?text=http://bit.ly/oxygenbedtamilnadu'+ "%0a" +  "%0a" +message);
         }
-        function funClickCount(elem) {
+        window.funClickCount = function(elem) {
           var districtid = $(elem).closest('tr').attr("districtid")
           destroyTable()
           showElement(homeicon)
@@ -643,7 +643,7 @@
             return value + ","
           }
         }
-        function funClickHospital(elem) {
+        window.funClickHospital = function(elem) {
           var hospitalid = $(elem).closest('tr').attr("id")
           var Name = $(elem).closest('tr').attr("Name")
           var BedsAllotedForCovidTreatment = $(elem).closest('tr').attr("BedsAllotedForCovidTreatment")
@@ -694,7 +694,7 @@
           $("#" + tableid).parents('div.dataTables_wrapper').first().hide()
           loaddataingrid(obj)
         }
-        function fnclose() {
+        window.fnclose = function() {
 
           $("#detail tr").remove()
           $("#" + tableid).parents('div.dataTables_wrapper').first().show()
