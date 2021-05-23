@@ -27,217 +27,296 @@
     <span> TN Covid O2 Bed Availability Dashboard </span>
     <a href="/">Map View</a>
   </div>
-
-  <div class="text-right" style="margin-bottom: 5pX;">
-    <i id="shareicon" class="fa fa-whatsapp pointer" style="display: none; " onclick="fnShare()">
-      Share</i>&nbsp
-    <i id="closeicon" class="pointer fa fa-close" style="display: none;" onclick="fnclose()">
-      Close</i>&nbsp&nbsp&nbsp
-  </div>
-
-  <div class="table-responsive-sm" style="overflow: scroll; height:auto">
-    <table class="table table-bordered table-hover table-striped " id="id_table1">
-      <thead>
-        <tr>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-  </div>
-  <div class="table-responsive-sm" style="overflow: scroll; height:auto">
-    <table class="table table-bordered table-hover table-striped " id="id_table2">
-      <thead>
-        <tr>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-  </div>
-  <div class="table-responsive-sm " id="id_grid">
-    <table class='table table-bordered' style='background-color: white; color: black; border-color: black;'>
-      <tbody id='detail'></tbody>
-    </table>
-  </div>
-  <div class="row">
-    <div class="col text-left">
-      <label style=" font-size: 14px;"> Data Source: </label><i style=" font-size: 14px;"><a
-          href="https://tncovidbeds.tnega.org/" target="_blank">
-          https://tncovidbeds.tnega.org/</a></i>
+ 
+    <div class="text-right" style="margin-bottom: 5pX;">
+      <i id="shareicon" class="fa fa-whatsapp pointer" style="display: none; " onclick="fnShare()">
+        Share</i>&nbsp
+      <i id="closeicon" class="pointer fa fa-close" style="display: none;" onclick="fnclose()">
+        Close</i>&nbsp&nbsp&nbsp
     </div>
-  </div>
-  <div class="row">
-    <div class="col text-left">
-      <h4>
-        <span id="id_search" class=" pointer badge  badge-pill badge-secondary"
-          style="display: none;font-size: 14px;">Search
-          Hospital</span>
-      </h4>
+
+    <div class="table-responsive-sm" style="overflow: scroll; height:auto">
+      <table class="table table-bordered table-hover table-striped " id="id_table1">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
-    <div class="col text-right">
-      <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" id="darkSwitch" style="size: 14px;">
-        <label class="custom-control-label darkmode " style=" font-size: 14px;" for="darkSwitch">Dark Mode</label>
+    <div class="table-responsive-sm" style="overflow: scroll; height:auto">
+      <table class="table table-bordered table-hover table-striped " id="id_table2">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-responsive-sm " id="id_grid">
+      <table class='table table-bordered' style='background-color: white; color: black; border-color: black;'>
+        <tbody id='detail'></tbody>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col text-left">
+        <label style=" font-size: 14px;"> Data Source: </label><i style=" font-size: 14px;"><a
+            href="https://tncovidbeds.tnega.org/" target="_blank">
+            https://tncovidbeds.tnega.org/</a></i>
       </div>
     </div>
+    <div class="row">
+      <div class="col text-left">
+        <h4>
+          <span id="id_search" class=" pointer badge  badge-pill badge-secondary"
+            style="display: none;font-size: 14px;">Search
+            Hospital</span>
+        </h4>
+      </div>
+      <div class="col text-right">
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="darkSwitch" style="size: 14px;">
+          <label class="custom-control-label darkmode " style=" font-size: 14px;" for="darkSwitch">Dark Mode</label>
+        </div>
+      </div>
 
 
 
-  </div>
+    </div>
 
 
 
 
-  <script src="https://unpkg.com/realm-web@1.2.0/dist/bundle.iife.js"></script>
+    <script src="https://unpkg.com/realm-web@1.2.0/dist/bundle.iife.js"></script>
 
 
-  <script type="text/javascript">
+    <script type="text/javascript">
 
-    const app = new Realm.App({ id: "tncovidresource-wvjzp" });
-    const credentials = Realm.Credentials.apiKey("An0lsNjTyVQtGNOJ1mD9EdKWYKeeTbMIM8H8R1dG2AKMzx1b9fSgG72iv67C7pFF");
-    app.logIn(credentials).then(function (user) {
-      const mongodb = app.currentUser.mongoClient("mongodb-atlas");
-      const hospitalCollection = mongodb.db("covidresource").collection("tn_hospital_locations");
+      const app = new Realm.App({ id: "tncovidresource-wvjzp" });
+      const credentials = Realm.Credentials.apiKey("An0lsNjTyVQtGNOJ1mD9EdKWYKeeTbMIM8H8R1dG2AKMzx1b9fSgG72iv67C7pFF");
+      app.logIn(credentials).then(function (user) {
+        const mongodb = app.currentUser.mongoClient("mongodb-atlas");
+        const hospitalCollection = mongodb.db("covidresource").collection("tn_hospital_locations");
 
-      var tableid1 = "id_table1"
-      var tableid2 = "id_table2"
-      var searchid = "id_search"
-      var homeicon = "homeicon"
-      var closeicon = "closeicon"
-      var shareicon = "shareicon"
-      var gridid = "id_grid"
+        var tableid1 = "id_table1"
+        var tableid2 = "id_table2"
+        var searchid = "id_search"
+        var homeicon = "homeicon"
+        var closeicon = "closeicon"
+        var shareicon = "shareicon"
+        var gridid = "id_grid"
 
-      function higlightbadge(id) {
-        $("span#" + id).siblings().addClass('badge-secondary');
-        $("span#" + id).addClass('badge-success');
-        $("span#" + id).siblings().removeClass('badge-primary badge-success');
-      }
-
-      function destroyTable(tableid) {
-        if ($.fn.DataTable.isDataTable('#' + tableid)) {
-          $('#' + tableid).DataTable().clear().destroy();
-          $('#' + tableid).empty();
+        function higlightbadge(id) {
+          $("span#" + id).siblings().addClass('badge-secondary');
+          $("span#" + id).addClass('badge-success');
+          $("span#" + id).siblings().removeClass('badge-primary badge-success');
         }
-      }
 
-
-      var body = function () {
-        var data =
-        {
-          pageLimit: 2000,
-          SortValue: "Availability",
-          ShowIfVacantOnly: "",
-          IsGovernmentHospital: true,
-          IsPrivateHospital: true,
-          FacilityTypes: [
-            "CHO",
-            "CHC",
-            "CCC"
-          ],
+        function destroyTable(tableid) {
+          if ($.fn.DataTable.isDataTable('#' + tableid)) {
+            $('#' + tableid).DataTable().clear().destroy();
+            $('#' + tableid).empty();
+          }
         }
-        return JSON.stringify(data);
-      };
-      function loadAllHospitalData(tableid, badgeid) {
-        hideElement(searchid)
-        getCovidData(function (response) {
-          $('#' + tableid).DataTable({
-            stripeClasses: ['oddrow', 'evenrow'],
-            data: response.result,
-            createdRow: function (row, data, dataIndex) {
-              $(row).attr('id', data._id);
-              $(row).attr('Name', data.Name);
-              $(row).attr('BedsAllotedForCovidTreatment', data.CovidBedDetails.BedsAllotedForCovidTreatment);
-              $(row).attr('VaccantNonO2Beds', data.CovidBedDetails.VaccantNonO2Beds);
-              $(row).attr('VaccantICUBeds', data.CovidBedDetails.VaccantICUBeds);
-              $(row).attr('VaccantO2Beds', data.CovidBedDetails.VaccantO2Beds);
-              $(row).attr('UpdatedDateTime', data.UpdatedDateTime);
-
-              $(row).attr('Latitude', data.Latitude);
-              $(row).attr('Longitude', data.Longitude);
-              $(row).attr('ContactName', data.ContactDetails[0].ContactName);
-              $(row).attr('ContactNumber', data.ContactDetails[0].ContactNumber);
-
-              $(row).attr('Line1', data.AddressDetail.Line1);
-              $(row).attr('Line2', data.AddressDetail.Line2);
-              $(row).attr('Line3', data.AddressDetail.Line3);
-              $(row).attr('Pincode', data.AddressDetail.Pincode);
-              $(row).attr('District', data.District.Name);
 
 
-            },
-            columns: [
-              {
-                title: "Hospital Name",
-                "mRender": function (data, type, full, meta) {
-                  var timestamp = full.UpdatedDateTime
-                  var date = new Date(timestamp * 1000).toString()
-                  return '<u  class="pointer" id=' + full._id + ' aria-pressed="true" onclick=funClickHospital(this)>' + full.Name + '</u> ' + "<br>" + "<span style='font-size: 10px;'> <i >Last updated on: </i>" + date.split('GMT')[0] + "</span>";
-                }
-              },
-              {
-                title: "District",
-                data: 'District.Name'
-              },
-              {
-                title: "o2 Beds Available",
-                data: 'CovidBedDetails.VaccantO2Beds'
-              },
+        var body = function () {
+          var data =
+          {
+            pageLimit: 2000,
+            SortValue: "Availability",
+            ShowIfVacantOnly: "",
+            IsGovernmentHospital: true,
+            IsPrivateHospital: true,
+            FacilityTypes: [
+              "CHO",
+              "CHC",
+              "CCC"
             ],
-            columnDefs: [
-              {
-                render: function (data, type, row) {
-                  if (data != undefined) {
-                    return data;
-                  } else {
-                    return ""
-                  }
-                },
-                targets: '_all'
-              },
-              {
-                targets: '_all',
-                className: "dt-head-left",
-                className: "dt-body-left",
-              },
-
-            ],
-            "order": [[2, "desc"]],
-            "destroy": true, "fnDrawCallback": function (oSettings) {
-              handleDarkMode()
-            },
-
-          });
-        });
-      }
-
-      function loadAllHospitalCounts(tableid) {
-        getDistrictList(function (response) {
-          getCount1(response, function (response1) {
-            var obj = JSON.parse(response1);
+          }
+          return JSON.stringify(data);
+        };
+        function loadAllHospitalData(tableid, badgeid) {
+          hideElement(searchid)
+          getCovidData(function (response) {
             $('#' + tableid).DataTable({
               stripeClasses: ['oddrow', 'evenrow'],
-              data: obj.result,
+              data: response.result,
               createdRow: function (row, data, dataIndex) {
-                $(row).attr('districtid', data.DistrictID);
+                $(row).attr('id', data._id);
+                $(row).attr('Name', data.Name);
+                $(row).attr('BedsAllotedForCovidTreatment', data.CovidBedDetails.BedsAllotedForCovidTreatment);
+                $(row).attr('VaccantNonO2Beds', data.CovidBedDetails.VaccantNonO2Beds);
+                $(row).attr('VaccantICUBeds', data.CovidBedDetails.VaccantICUBeds);
+                $(row).attr('VaccantO2Beds', data.CovidBedDetails.VaccantO2Beds);
+                $(row).attr('UpdatedDateTime', data.UpdatedDateTime);
+
+                $(row).attr('Latitude', data.Latitude);
+                $(row).attr('Longitude', data.Longitude);
+                $(row).attr('ContactName', data.ContactDetails[0].ContactName);
+                $(row).attr('ContactNumber', data.ContactDetails[0].ContactNumber);
+
+                $(row).attr('Line1', data.AddressDetail.Line1);
+                $(row).attr('Line2', data.AddressDetail.Line2);
+                $(row).attr('Line3', data.AddressDetail.Line3);
+                $(row).attr('Pincode', data.AddressDetail.Pincode);
+                $(row).attr('District', data.District.Name);
+
+
               },
               columns: [
                 {
-                  title: "District Name",
-                  data: "Name",
-                  width: "100px"
+                  title: "Hospital Name",
+                  "mRender": function (data, type, full, meta) {
+                    var timestamp = full.UpdatedDateTime
+                    var date = new Date(timestamp * 1000).toString()
+                    return '<u  class="pointer" id=' + full._id + ' aria-pressed="true" onclick=funClickHospital(this)>' + full.Name + '</u> ' + "<br>" + "<span style='font-size: 10px;'> <i >Last updated on: </i>" + date.split('GMT')[0] + "</span>";
+                  }
                 },
                 {
-                  title: "Available o2 Beds",
-                  data: 'Count',
-                  render: function (data, type, row, meta) {
-                    var rownum = meta.row + 1
-                    var buttonrowid = "i_viewbutton_" + rownum
-                    return '<u  class="pointer" id=' + buttonrowid + ' aria-pressed="true" onclick=funClickCount(this)>' + data + '</u> ';
+                  title: "District",
+                  data: 'District.Name'
+                },
+                {
+                  title: "o2 Beds Available",
+                  data: 'CovidBedDetails.VaccantO2Beds'
+                },
+              ],
+              columnDefs: [
+                {
+                  render: function (data, type, row) {
+                    if (data != undefined) {
+                      return data;
+                    } else {
+                      return ""
+                    }
+                  },
+                  targets: '_all'
+                },
+                {
+                  targets: '_all',
+                  className: "dt-head-left",
+                  className: "dt-body-left",
+                },
+
+              ],
+              "order": [[2, "desc"]],
+              "destroy": true, "fnDrawCallback": function (oSettings) {
+                handleDarkMode()
+              },
+
+            });
+          });
+        }
+
+        function loadAllHospitalCounts(tableid) {
+          getDistrictList(function (response) {
+            getCount(response, function (response1) {
+              var obj = JSON.parse(response1);
+              $('#' + tableid).DataTable({
+                stripeClasses: ['oddrow', 'evenrow'],
+                data: obj.result,
+                createdRow: function (row, data, dataIndex) {
+                  $(row).attr('districtid', data.DistrictID);
+                },
+                columns: [
+                  {
+                    title: "District Name",
+                    data: "Name",
+                    width: "100px"
+                  },
+                  {
+                    title: "Available o2 Beds",
+                    data: 'VaccantO2Beds',
+                    render: function (data, type, row, meta) {
+                      var rownum = meta.row + 1
+                      var buttonrowid = "i_viewbutton_" + rownum
+                      return '<u  class="pointer" id=' + buttonrowid + ' aria-pressed="true" onclick=funClickCount(this)>' + data + '</u> ';
+                    },
+                    width: "100px",
+                  }
+
+                ],
+                columnDefs: [
+                  {
+                    render: function (data, type, row) {
+                      if (data != undefined) {
+                        return data;
+                      } else {
+                        return ""
+                      }
+                    },
+                    targets: '_all'
+                  },
+                  {
+                    targets: '_all',
+                    className: "dt-head-left",
+                    className: "dt-body-left",
+                  },
+                ],
+                "bPaginate": false,
+                "searching": false,
+                "bLengthChange": false,
+                "bInfo": false,
+                "order": [[1, "desc"]],
+                "destroy": true, "fnDrawCallback": function (oSettings) {
+                  handleDarkMode()
+                }
+              });
+
+            });
+            showElement(searchid)
+
+          });
+        }
+
+
+        function loadSpecificHospital(tableid, districtid) {
+          getSingleDistrictCount(districtid, function (response) {
+            $('#' + tableid).append('<caption class="darkmode" style="caption-side: top; color:white">District: ' + response.result[0].District.Name + '</caption>');
+            $('#' + tableid).DataTable({
+              stripeClasses: ['oddrow', 'evenrow'],
+              data: response.result,
+              createdRow: function (row, data, dataIndex) {
+                $(row).attr('id', data._id);
+                $(row).attr('Name', data.Name);
+                $(row).attr('BedsAllotedForCovidTreatment', data.CovidBedDetails.BedsAllotedForCovidTreatment);
+                $(row).attr('VaccantNonO2Beds', data.CovidBedDetails.VaccantNonO2Beds);
+                $(row).attr('VaccantICUBeds', data.CovidBedDetails.VaccantICUBeds);
+                $(row).attr('VaccantO2Beds', data.CovidBedDetails.VaccantO2Beds);
+                $(row).attr('UpdatedDateTime', data.UpdatedDateTime);
+
+                $(row).attr('Latitude', data.Latitude);
+                $(row).attr('Longitude', data.Longitude);
+                $(row).attr('ContactName', data.ContactDetails[0].ContactName);
+                $(row).attr('ContactNumber', data.ContactDetails[0].ContactNumber);
+
+                $(row).attr('Line1', data.AddressDetail.Line1);
+                $(row).attr('Line2', data.AddressDetail.Line2);
+                $(row).attr('Line3', data.AddressDetail.Line3);
+                $(row).attr('Pincode', data.AddressDetail.Pincode);
+                $(row).attr('District', data.District.Name);
+
+
+              },
+              columns: [
+                {
+                  title: "Hospital Name",
+                  "mRender": function (data, type, full, meta) {
+                    var timestamp = full.UpdatedDateTime
+                    var date = new Date(timestamp * 1000).toString()
+                    return '<u  class="pointer" id=' + full._id + ' aria-pressed="true" onclick=funClickHospital(this)>' + full.Name + '</u> ' + "<br>" + "<span style='font-size: 10px;'> <i >Last updated on: </i>" + date.split('GMT')[0] + "</span>";
                   },
                   width: "100px",
-                }
+                },
 
+                {
+                  title: "Available o2 Beds",
+                  data: 'CovidBedDetails.VaccantO2Beds',
+                  width: "100px",
+                },
               ],
               columnDefs: [
                 {
@@ -256,6 +335,7 @@
                   className: "dt-body-left",
                 },
               ],
+
               "bPaginate": false,
               "searching": false,
               "bLengthChange": false,
@@ -263,469 +343,419 @@
               "order": [[1, "desc"]],
               "destroy": true, "fnDrawCallback": function (oSettings) {
                 handleDarkMode()
-              }
+              },
+              rowCallback: function (row, data, index) {
+                if (data['column'] <= 0) {
+                  $(row).hide();
+                }
+              },
             });
 
-          });
-          showElement(searchid)
 
-        });
-      }
-
-
-      function loadSpecificHospital(tableid, districtid) {
-        getSingleDistrictCount(districtid, function (response) {
-          $('#' + tableid).append('<caption class="darkmode" style="caption-side: top; color:white">District: ' + response.result[0].District.Name + '</caption>');
-          $('#' + tableid).DataTable({
-            stripeClasses: ['oddrow', 'evenrow'],
-            data: response.result,
-            createdRow: function (row, data, dataIndex) {
-              $(row).attr('id', data._id);
-              $(row).attr('Name', data.Name);
-              $(row).attr('BedsAllotedForCovidTreatment', data.CovidBedDetails.BedsAllotedForCovidTreatment);
-              $(row).attr('VaccantNonO2Beds', data.CovidBedDetails.VaccantNonO2Beds);
-              $(row).attr('VaccantICUBeds', data.CovidBedDetails.VaccantICUBeds);
-              $(row).attr('VaccantO2Beds', data.CovidBedDetails.VaccantO2Beds);
-              $(row).attr('UpdatedDateTime', data.UpdatedDateTime);
-
-              $(row).attr('Latitude', data.Latitude);
-              $(row).attr('Longitude', data.Longitude);
-              $(row).attr('ContactName', data.ContactDetails[0].ContactName);
-              $(row).attr('ContactNumber', data.ContactDetails[0].ContactNumber);
-
-              $(row).attr('Line1', data.AddressDetail.Line1);
-              $(row).attr('Line2', data.AddressDetail.Line2);
-              $(row).attr('Line3', data.AddressDetail.Line3);
-              $(row).attr('Pincode', data.AddressDetail.Pincode);
-              $(row).attr('District', data.District.Name);
-
-
-            },
-            columns: [
-              {
-                title: "Hospital Name",
-                "mRender": function (data, type, full, meta) {
-                  var timestamp = full.UpdatedDateTime
-                  var date = new Date(timestamp * 1000).toString()
-                  return '<u  class="pointer" id=' + full._id + ' aria-pressed="true" onclick=funClickHospital(this)>' + full.Name + '</u> ' + "<br>" + "<span style='font-size: 10px;'> <i >Last updated on: </i>" + date.split('GMT')[0] + "</span>";
-                },
-                width: "100px",
-              },
-
-              {
-                title: "Available o2 Beds",
-                data: 'CovidBedDetails.VaccantO2Beds',
-                width: "100px",
-              },
-            ],
-            columnDefs: [
-              {
-                render: function (data, type, row) {
-                  if (data != undefined) {
-                    return data;
-                  } else {
-                    return ""
-                  }
-                },
-                targets: '_all'
-              },
-              {
-                targets: '_all',
-                className: "dt-head-left",
-                className: "dt-body-left",
-              },
-            ],
-
-            "bPaginate": false,
-            "searching": false,
-            "bLengthChange": false,
-            "bInfo": false,
-            "order": [[1, "desc"]],
-            "destroy": true, "fnDrawCallback": function (oSettings) {
-              handleDarkMode()
-            },
-            rowCallback: function (row, data, index) {
-              if (data['column'] <= 0) {
-                $(row).hide();
-              }
-            },
           });
 
-
-        });
-
-      }
-
-
-      function getSingleDistrictCount(districtid, callback) {
-        $.LoadingOverlay("show");
-        hospitalCollection.find({ "District._id": districtid }).then(function (hospitals) {
-          const data = {
-            result: hospitals
-          }
-          $.LoadingOverlay("hide");
-          callback(data);
-        });
-        // $.ajax({
-        //   url: "https://tncovidbeds.tnega.org/api/hospitals",
-        //   method: 'POST',
-        //   headers: {
-        //     'content-type': 'application/json;charset=UTF-8'
-        //   },
-        //   contentType: "application/json",
-        //   data: bodyWithDistrictId(districtid),
-        //   success: function (data, textStatus, xhr) {
-        //     var status = xhr.status;
-        //     if (status == 200) {
-        //       console.log(data)
-        //       return callback(data);
-        //     }
-        //   }, error: function (error) {
-        //     console.log("Error in deleting data");
-        //     console.log(error)
-        //   }
-        // });
-      }
-
-
-    function getDistrictList(callback) {
-    $.ajax({
-      url: "https://tncovidbeds.tnega.org/api/district",
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json;charset=UTF-8'
-      },
-      beforeSend: function () {
-        $.LoadingOverlay("show");
-      },
-      contentType: "application/json",
-      success: function (data, textStatus, xhr) {
-        var status = xhr.status;
-        var temp = ""
-        if (status == 200) {
-          for (let index = 0; index < data.result.length; index++) {
-            if (temp === "") {
-              temp = data.result[index]._id
-            }
-            temp = temp + "\",\"" + data.result[index]._id
-          }
-          var alldstrictlis = temp
-          return callback(alldstrictlis);
         }
-      }, error: function (error) {
-        console.log("Error in deleting data");
-        console.log(error)
-      }, complete: function (data) {
-        $.LoadingOverlay("hide");
-      }
-    });
-  }
 
 
-      function getCount1(districtids, callback) {
-        $.ajax({
-          url: "https://tncovidbeds.tnega.org/api/hospitals",
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json;charset=UTF-8'
-          },
-          contentType: "application/json",
-          data: bodyWithDistrictId(districtids),
-          beforeSend: function () {
-            $.LoadingOverlay("show");
-          },
-          success: function (data, textStatus, xhr) {
-            var status = xhr.status;
-            if (status == 200) {
-              var ids = districtids.replaceAll("\"", "").split(",")
-              var arr = [];
-              for (i = 1; i < ids.length; i++) {
-                count = 0
-                for (let index = 0; index < data.result.length; index++) {
-                  if (data.result[index].District._id === ids[i]) {
-                    var districtName = data.result[index].District.Name;
-                    count = count + data.result[index].CovidBedDetails.VaccantO2Beds
-                  }
-                }
-                arr.push("{\"Name\":\"" + districtName + "\"," + "\"Count\":\"" + count + "\"," + "\"DistrictID\":\"" + ids[i] + "\"}")
-
-              }
-              var j1 = "{\"result\":[" + arr + "]}"
-              return callback(j1);
+        function getSingleDistrictCount(districtid, callback) {
+          $.LoadingOverlay("show");
+          hospitalCollection.find({ "District._id": districtid }).then(function (hospitals) {
+            const data = {
+              result: hospitals
             }
-            else if (status == 401) {
-              console.log("Access Token Expired So unable to upload the file");
-            }
-          }, error: function (error) {
-            console.log("Error in deleting data");
-            console.log(error)
-          },
-          complete: function (data) {
             $.LoadingOverlay("hide");
-          }
-        });
-      }
-
-      var bodyWithDistrictId = function (districtid) {
-        var data =
-        {
-          Districts: [districtid],
-          pageLimit: 2000,
-          SortValue: "Availability",
-          ShowIfVacantOnly: "",
-          IsGovernmentHospital: true,
-          IsPrivateHospital: true,
-          FacilityTypes: [
-            "CHO",
-            "CHC",
-            "CCC"
-          ],
-        }
-        data = JSON.stringify(data)
-        data = data.replaceAll("\\", "");
-        var obj = JSON.parse(data);
-        return JSON.stringify(obj);
-      };
-      function getCovidData(callback) {
-        $.LoadingOverlay("show");
-
-        hospitalCollection.find().then(function (hospitals) {
-          const data = {
-            result: hospitals
-          }
-          $.LoadingOverlay("hide");
-
-          callback(data);
-        });
-        // $.ajax({
-        //   url: "https://tncovidbeds.tnega.org/api/hospitals",
-        //   method: 'POST',
-        //   headers: {
-        //     'content-type': 'application/json;charset=UTF-8'
-        //   },
-        //   contentType: "application/json",
-        //   data: body(),
-        //   success: function (data, textStatus, xhr) {
-        //     var status = xhr.status;
-        //     if (status == 200) {
-        //       return callback(data);
-        //     }
-        //     else if (status == 401) {
-        //       console.log("Access Token Expired So unable to upload the file");
-        //     }
-        //   }, error: function (error) {
-        //     console.log("Error in deleting data");
-        //     console.log(error)
-        //   }
-        // });
-      }
-      $(document).ready(function () {
-        $.getScript("/tncovidbeds-map/DarkMode/dark-mode-switch.min.js", function () {
-          $("#darkSwitch").click(function () {
-            handleDarkMode()
+            callback(data);
           });
+          // $.ajax({
+          //   url: "https://tncovidbeds.tnega.org/api/hospitals",
+          //   method: 'POST',
+          //   headers: {
+          //     'content-type': 'application/json;charset=UTF-8'
+          //   },
+          //   contentType: "application/json",
+          //   data: bodyWithDistrictId(districtid),
+          //   success: function (data, textStatus, xhr) {
+          //     var status = xhr.status;
+          //     if (status == 200) {
+          //       console.log(data)
+          //       return callback(data);
+          //     }
+          //   }, error: function (error) {
+          //     console.log("Error in deleting data");
+          //     console.log(error)
+          //   }
+          // });
+        }
+
+
+        function getDistrictList(callback) {
+          $.ajax({
+            url: "https://tncovidbeds.tnega.org/api/district",
+            method: 'GET',
+            headers: {
+              'content-type': 'application/json;charset=UTF-8'
+            },
+            beforeSend: function () {
+              $.LoadingOverlay("show");
+            },
+            contentType: "application/json",
+            success: function (data, textStatus, xhr) {
+              var status = xhr.status;
+              var temp = ""
+              if (status == 200) {
+                for (let index = 0; index < data.result.length; index++) {
+                  if (temp === "") {
+                    temp = data.result[index]._id
+                  }
+                  temp = temp + "\",\"" + data.result[index]._id
+                }
+               
+                return callback(temp);
+              }
+            }, error: function (error) {
+              console.log("Error in deleting data");
+              console.log(error)
+            }, complete: function (data) {
+              $.LoadingOverlay("hide");
+            }
+          });
+        }
+
+        function getCount(districtids, callback) {
+          $.LoadingOverlay("show");
+            hospitalCollection.find().then(function(hospitals){
+              const data = {
+                result: hospitals
+              }
+              console.log(data)
+              var ids = districtids.replaceAll("\"", "").split(",")
+                var arr = [];
+                for (i = 1; i < ids.length; i++) {
+                  vacanto2count = 0
+                  vacantnono2count = 0
+
+                  for (let index = 0; index < data.result.length; index++) {
+                    if (data.result[index].District._id === ids[i]) {
+                      var districtName = data.result[index].District.Name;
+                      vacanto2count = vacanto2count + data.result[index].CovidBedDetails.VaccantO2Beds
+                      vacantnono2count = vacantnono2count + data.result[index].CovidBedDetails.VaccantNonO2Beds
+
+                    }
+                  }
+                  arr.push("{\"Name\":\"" + districtName + "\"," + "\"VaccantO2Beds\":\"" + vacanto2count + "\"," +  "\"VaccantNonO2Beds\":\"" + vacantnono2count + "\","+"\"DistrictID\":\"" + ids[i] + "\"}")
+
+                }
+                var j1 = "{\"result\":[" + arr + "]}"
+                $.LoadingOverlay("hide");
+                console.log(j1)
+
+                return callback(j1);
+              
+            })
+          // $.ajax({
+          //   url: "https://tncovidbeds.tnega.org/api/hospitals",
+          //   method: 'POST',
+          //   headers: {
+          //     'content-type': 'application/json;charset=UTF-8'
+          //   },
+          //   contentType: "application/json",
+          //   data: bodyWithDistrictId(districtid),
+          //   success: function (data, textStatus, xhr) {
+          //     var status = xhr.status;
+          //     if (status == 200) {
+          //       var temp = 0
+          //       var name = ""
+          //       var i = 1
+          //       for (let index = 0; index < data.result.length; index++) {
+          //         temp = temp + data.result[index].CovidBedDetails.VaccantO2Beds;
+          //         if (data.result[index].CovidBedDetails.VaccantO2Beds !== 0) {
+          //           if (name === "") {
+          //             name = i + ". " + data.result[index].Name + " <span style='color: red;'>" + data.result[index].CovidBedDetails.VaccantO2Beds + "</span>";
+          //           } else {
+          //             name = name + "<br>" + i + ". " + data.result[index].Name + " <span style='color: red;'>" + data.result[index].CovidBedDetails.VaccantO2Beds + "</span>";
+          //           }
+          //           i++;
+          //         }
+          //       }
+          //       var json =
+          //       {
+          //         TotalCount: data.pagination.totalCount,
+          //         AvalilableO2Beds: temp,
+          //         Hospitalnamelist: name
+          //       }
+          //       return callback(json);
+          //     }
+          //     else if (status == 401) {
+          //       console.log("Access Token Expired So unable to upload the file");
+          //     }
+          //   }, error: function (error) {
+          //     console.log("Error in deleting data");
+          //     console.log(error)
+          //   }
+          // });
+        }
+
+       
+        var bodyWithDistrictId = function (districtid) {
+          var data =
+          {
+            Districts: [districtid],
+            pageLimit: 2000,
+            SortValue: "Availability",
+            ShowIfVacantOnly: "",
+            IsGovernmentHospital: true,
+            IsPrivateHospital: true,
+            FacilityTypes: [
+              "CHO",
+              "CHC",
+              "CCC"
+            ],
+          }
+          data = JSON.stringify(data)
+          data = data.replaceAll("\\", "");
+          var obj = JSON.parse(data);
+          return JSON.stringify(obj);
+        };
+        function getCovidData(callback) {
+          $.LoadingOverlay("show");
+
+          hospitalCollection.find().then(function (hospitals) {
+            const data = {
+              result: hospitals
+            }
+            $.LoadingOverlay("hide");
+
+            callback(data);
+          });
+          // $.ajax({
+          //   url: "https://tncovidbeds.tnega.org/api/hospitals",
+          //   method: 'POST',
+          //   headers: {
+          //     'content-type': 'application/json;charset=UTF-8'
+          //   },
+          //   contentType: "application/json",
+          //   data: body(),
+          //   success: function (data, textStatus, xhr) {
+          //     var status = xhr.status;
+          //     if (status == 200) {
+          //       return callback(data);
+          //     }
+          //     else if (status == 401) {
+          //       console.log("Access Token Expired So unable to upload the file");
+          //     }
+          //   }, error: function (error) {
+          //     console.log("Error in deleting data");
+          //     console.log(error)
+          //   }
+          // });
+        }
+        $(document).ready(function () {
+          $.getScript("/tncovidbeds-map/DarkMode/dark-mode-switch.min.js", function () {
+            $("#darkSwitch").click(function () {
+              handleDarkMode()
+            });
+          });
+          $.extend($.fn.DataTable.defaults, {
+            autoWidth: false,
+            info: true,
+            paging: true,
+            searching: true,
+            ordering: true,
+            select: true,
+            lengthMenu: [[-1, 10, 25, 50,], ["All", 10, 25, 50]],
+            "pageLength": 50,
+          });
+          loadAllHospitalCounts(tableid1)
+          $("#" + searchid).click(function () {
+            hidetable(tableid1)
+            showElement(homeicon)
+            destroyTable(tableid2)
+            loadAllHospitalData(tableid2, searchid)
+          });
+
+          // $.getScript("/JQuery/jquery.min.js", function () {
+          //   $.getScript("/Bootstrap/bootstrap.min.js", function () {
+          //       $.getScript("/DataTables/datatables.min.js", function () {
+
+          //       });
+
+          //     });
+          //   });
         });
-        $.extend($.fn.DataTable.defaults, {
-          autoWidth: false,
-          info: true,
-          paging: true,
-          searching: true,
-          ordering: true,
-          select: true,
-          lengthMenu: [[-1, 10, 25, 50,], ["All", 10, 25, 50]],
-          "pageLength": 50,
-        });
-        loadAllHospitalCounts(tableid1)
-        $("#" + searchid).click(function () {
+
+        function showElement(id) {
+          $("#" + id).show()
+        }
+
+        function hideElement(id) {
+          $("#" + id).hide()
+        }
+
+        function removegrid() {
+          $("#detail tr").remove()
+
+        }
+
+        window.fnback = function () {
+          showtable(tableid1)
+          showElement(searchid)
+          hidetable(tableid2)
+          removegrid()
+          hideElement(homeicon)
+          hideElement(closeicon)
+          hideElement(shareicon)
+        }
+
+
+        window.fnShare = function () {
+          var message = localStorage.getItem("wmessage")
+          window.open('whatsapp://send?text=https://tnoxygenbeds.netlify.app/' + "%0a" + "%0a" + message);
+        }
+        window.funClickCount = function (elem) {
+          var districtid = $(elem).closest('tr').attr("districtid")
           hidetable(tableid1)
           showElement(homeicon)
           destroyTable(tableid2)
-          loadAllHospitalData(tableid2, searchid)
-        });
-      
-        // $.getScript("/JQuery/jquery.min.js", function () {
-        //   $.getScript("/Bootstrap/bootstrap.min.js", function () {
-        //       $.getScript("/DataTables/datatables.min.js", function () {
+          loadSpecificHospital(tableid2, districtid)
 
-        //       });
+        }
 
-        //     });
-        //   });
+        function checkValue(value) {
+          if (value === undefined || value === "" || value === "undefined") {
+            return ""
+          } else {
+            return value + ","
+          }
+        }
+
+        function showtable(tableid) {
+          $("#" + tableid).parents('div.dataTables_wrapper').first().show()
+        }
+
+        function hidetable(tableid) {
+          $("#" + tableid).parents('div.dataTables_wrapper').first().hide()
+        }
+
+        window.funClickHospital = function (elem) {
+          var hospitalid = $(elem).closest('tr').attr("id")
+          var Name = $(elem).closest('tr').attr("Name")
+          var BedsAllotedForCovidTreatment = $(elem).closest('tr').attr("BedsAllotedForCovidTreatment")
+          var VaccantNonO2Beds = $(elem).closest('tr').attr("VaccantNonO2Beds")
+          var VaccantO2Beds = $(elem).closest('tr').attr("VaccantO2Beds")
+          var VaccantICUBeds = $(elem).closest('tr').attr("VaccantICUBeds")
+          var UpdatedDateTime = $(elem).closest('tr').attr("UpdatedDateTime")
+          var Latitude = $(elem).closest('tr').attr("Latitude")
+          var Longitude = $(elem).closest('tr').attr("Longitude")
+          var geo = Latitude + "," + Longitude
+          var ContactName = $(elem).closest('tr').attr("ContactName")
+          var ContactNumber = $(elem).closest('tr').attr("ContactNumber")
+          var Line1 = $(elem).closest('tr').attr("Line1")
+          var Line2 = $(elem).closest('tr').attr("Line2")
+          var Line3 = $(elem).closest('tr').attr("Line3")
+          var District = $(elem).closest('tr').attr("District")
+          var Pincode = $(elem).closest('tr').attr("Pincode")
+
+          Line1 = checkValue(Line1);
+          Line2 = checkValue(Line2);
+          Line2 = checkValue(Line3);
+
+          Pincode = checkValue(Pincode);
+          ContactName = checkValue(ContactName);
+          ContactNumber = checkValue(ContactNumber);
+
+
+          var data =
+          {
+            Name: Name,
+            VaccantO2Beds: VaccantO2Beds,
+            VaccantNonO2Beds: VaccantNonO2Beds,
+            VaccantICUBeds: VaccantICUBeds,
+            ContactName: ContactName,
+            ContactNumber: ContactNumber,
+            Line: Line1 + Line2 + Line2,
+            Pincode: Pincode,
+            District: District,
+            Beds: "Beds Alloted For Covid: " + BedsAllotedForCovidTreatment +
+              "<br>" + "Vacant o2 Beds: " + VaccantO2Beds + "<br>" + "Vacant Non o2 Beds: " + VaccantNonO2Beds + "</span>" + "<br>" + "Vacant ICU Beds: " + VaccantICUBeds + "</span>",
+            UpdatedDateTime: UpdatedDateTime,
+            Address: "Contact Name: " + ContactName + "<br>" + "Contact Number: " + ContactNumber + "<br>" + "Address: " + Line1 + Line2 + Line3 + "<br>" + "Pincode: " + Pincode + "<br>" + "District: " + District + "<br>" + "<a href='https://maps.google.com/?q=" + geo + "' target='_blank'><i class='pointer fa fa-map-marker' style='font-size:14px;color:red'></i> Location</a>",
+          }
+          var stringified = JSON.stringify(data)
+          var finaljson = "[" + stringified + "]";
+          var obj = JSON.parse(finaljson);
+          showElement(homeicon)
+          hidetable(tableid2)
+          loaddataingrid(obj)
+        }
+        window.fnclose = function () {
+
+          removegrid()
+          showtable(tableid2)
+          hideElement(closeicon)
+          hideElement(shareicon)
+          showElement(searchid)
+
+        }
+
+        function waBold(value) {
+          value = replaceSymbol(value)
+          if (value !== "") { return "*" + value + "*" } else {
+            return ""
+          }
+        }
+
+
+        function replaceSymbol(value) {
+          return value.replace(/&/gi, " and ");
+        }
+
+        function loaddataingrid(json) {
+          hideElement(searchid)
+          showElement(closeicon)
+          showElement(shareicon)
+          var hname = "<u><b>Hospital Name </b></u>"
+          var beds = "<u><b >Beds Availibility Count </b></u>"
+          var addresslabel = "<u><b>Contact Details </b></u>"
+          var gridtable = "<tr class='darkmode' ><td>" + hname + "<br>" + json[0].Name + "</td></tr>" + "<tr  class='darkmode'><td>" + beds + "<br>" + json[0].Beds + "</td></tr>" + "<tr  class='darkmode'><td>" + addresslabel + "<br>" + json[0].Address + "</td></tr>"
+          var timestamp = json[0].UpdatedDateTime
+          var date = new Date(timestamp * 1000).toString()
+
+          var message = waBold(json[0].Name) + "%0a" + "Last Updated On: " + date.split('GMT')[0].toString() + "%0a" + "%0a" + "Vacant o2 Beds Count: " + waBold(json[0].VaccantO2Beds) + "%0a" + "Vacant Non o2 Beds Count: " + waBold(json[0].VaccantNonO2Beds) + "%0a" + "Vacant ICU Beds: " + waBold(json[0].VaccantICUBeds) + "" + "%0a" + "%0a" + "Contact Name: " + waBold(json[0].ContactName) + "%0a" + "Contact Number: " + waBold(json[0].ContactNumber) + "%0a" + "%0a" + "Address: " + "%0a" + waBold(json[0].Line) + "%0a" + waBold(json[0].District) + " " + waBold(json[0].Pincode);
+
+
+          localStorage.setItem("wmessage", message)
+          $("#detail").append(gridtable)
+        }
+
+
+
+        var datatableclassnames = ".table-responsive-sm,.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate, table.dataTable tbody tr.oddrow, table.dataTable tbody tr.evenrow,.dataTables_filter input ,  .dataTables_length select, .page-item.active .page-link, body,.modal-header,  .modal-body,tbody tr.darkmode, .darkmode, #detail"
+
+        function handleDarkMode() {
+          if ($("#darkSwitch").prop('checked') == true) {
+            $(datatableclassnames).css({
+              "background-color": "black",
+              "color": "white",
+              "border-color": "white"
+            }
+            );
+          } else {
+            $(datatableclassnames).css({
+              "background-color": "white",
+              "color": "black",
+              "border-color": "black"
+            }
+            );
+          }
+        }
       });
-
-      function showElement(id) {
-        $("#" + id).show()
-      }
-
-      function hideElement(id) {
-        $("#" + id).hide()
-      }
-
-      function removegrid() {
-        $("#detail tr").remove()
-
-      }
-
-      window.fnback = function () {
-        showtable(tableid1)
-        showElement(searchid)
-        hidetable(tableid2)
-        removegrid()
-        hideElement(homeicon)
-        hideElement(closeicon)
-        hideElement(shareicon)
-      }
+    </script>
 
 
-      window.fnShare = function () {
-        var message = localStorage.getItem("wmessage")
-        window.open('whatsapp://send?text=https://tnoxygenbeds.netlify.app/' + "%0a" + "%0a" + message);
-      }
-      window.funClickCount = function (elem) {
-        var districtid = $(elem).closest('tr').attr("districtid")
-        hidetable(tableid1)
-        showElement(homeicon)
-        destroyTable(tableid2)
-        loadSpecificHospital(tableid2, districtid)
+    <script type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
 
-      }
-
-      function checkValue(value) {
-        if (value === undefined || value === "" || value === "undefined") {
-          return ""
-        } else {
-          return value + ","
-        }
-      }
-
-      function showtable(tableid) {
-        $("#" + tableid).parents('div.dataTables_wrapper').first().show()
-      }
-
-      function hidetable(tableid) {
-        $("#" + tableid).parents('div.dataTables_wrapper').first().hide()
-      }
-
-      window.funClickHospital = function (elem) {
-        var hospitalid = $(elem).closest('tr').attr("id")
-        var Name = $(elem).closest('tr').attr("Name")
-        var BedsAllotedForCovidTreatment = $(elem).closest('tr').attr("BedsAllotedForCovidTreatment")
-        var VaccantNonO2Beds = $(elem).closest('tr').attr("VaccantNonO2Beds")
-        var VaccantO2Beds = $(elem).closest('tr').attr("VaccantO2Beds")
-        var VaccantICUBeds = $(elem).closest('tr').attr("VaccantICUBeds")
-        var UpdatedDateTime = $(elem).closest('tr').attr("UpdatedDateTime")
-        var Latitude = $(elem).closest('tr').attr("Latitude")
-        var Longitude = $(elem).closest('tr').attr("Longitude")
-        var geo = Latitude + "," + Longitude
-        var ContactName = $(elem).closest('tr').attr("ContactName")
-        var ContactNumber = $(elem).closest('tr').attr("ContactNumber")
-        var Line1 = $(elem).closest('tr').attr("Line1")
-        var Line2 = $(elem).closest('tr').attr("Line2")
-        var Line3 = $(elem).closest('tr').attr("Line3")
-        var District = $(elem).closest('tr').attr("District")
-        var Pincode = $(elem).closest('tr').attr("Pincode")
-
-        Line1 = checkValue(Line1);
-        Line2 = checkValue(Line2);
-        Line2 = checkValue(Line3);
-
-        Pincode = checkValue(Pincode);
-        ContactName = checkValue(ContactName);
-        ContactNumber = checkValue(ContactNumber);
-
-
-        var data =
-        {
-          Name: Name,
-          VaccantO2Beds: VaccantO2Beds,
-          VaccantNonO2Beds: VaccantNonO2Beds,
-          VaccantICUBeds: VaccantICUBeds,
-          ContactName: ContactName,
-          ContactNumber: ContactNumber,
-          Line: Line1 + Line2 + Line2,
-          Pincode: Pincode,
-          District: District,
-          Beds: "Beds Alloted For Covid: " + BedsAllotedForCovidTreatment +
-            "<br>" + "Vacant o2 Beds: " + VaccantO2Beds + "<br>" + "Vacant Non o2 Beds: " + VaccantNonO2Beds + "</span>" + "<br>" + "Vacant ICU Beds: " + VaccantICUBeds + "</span>",
-          UpdatedDateTime: UpdatedDateTime,
-          Address: "Contact Name: " + ContactName + "<br>" + "Contact Number: " + ContactNumber + "<br>" + "Address: " + Line1 + Line2 + Line3 + "<br>" + "Pincode: " + Pincode + "<br>" + "District: " + District + "<br>" + "<a href='https://maps.google.com/?q=" + geo + "' target='_blank'><i class='pointer fa fa-map-marker' style='font-size:14px;color:red'></i> Location</a>",
-        }
-        var stringified = JSON.stringify(data)
-        var finaljson = "[" + stringified + "]";
-        var obj = JSON.parse(finaljson);
-        showElement(homeicon)
-        hidetable(tableid2)
-        loaddataingrid(obj)
-      }
-      window.fnclose = function () {
-
-        removegrid()
-        showtable(tableid2)
-        hideElement(closeicon)
-        hideElement(shareicon)
-        showElement(searchid)
-
-      }
-
-      function waBold(value) {
-        value = replaceSymbol(value)
-        if (value !== "") { return "*" + value + "*" } else {
-          return ""
-        }
-      }
-
-
-      function replaceSymbol(value) {
-        return value.replace(/&/gi, " and ");
-      }
-
-      function loaddataingrid(json) {
-        hideElement(searchid)
-        showElement(closeicon)
-        showElement(shareicon)
-        var hname = "<u><b>Hospital Name </b></u>"
-        var beds = "<u><b >Beds Availibility Count </b></u>"
-        var addresslabel = "<u><b>Contact Details </b></u>"
-        var gridtable = "<tr class='darkmode' ><td>" + hname + "<br>" + json[0].Name + "</td></tr>" + "<tr  class='darkmode'><td>" + beds + "<br>" + json[0].Beds + "</td></tr>" + "<tr  class='darkmode'><td>" + addresslabel + "<br>" + json[0].Address + "</td></tr>"
-        var timestamp = json[0].UpdatedDateTime
-        var date = new Date(timestamp * 1000).toString()
-
-        var message = waBold(json[0].Name) + "%0a" +"Last Updated On: "+  date.split('GMT')[0].toString()+ "%0a" + "%0a" + "Vacant o2 Beds Count: " + waBold(json[0].VaccantO2Beds) + "%0a" + "Vacant Non o2 Beds Count: " + waBold(json[0].VaccantNonO2Beds) + "%0a" + "Vacant ICU Beds: " + waBold(json[0].VaccantICUBeds) + "" + "%0a" + "%0a" + "Contact Name: " + waBold(json[0].ContactName) + "%0a" + "Contact Number: " + waBold(json[0].ContactNumber) + "%0a" + "%0a" + "Address: " + "%0a" + waBold(json[0].Line) + "%0a" + waBold(json[0].District) + " " + waBold(json[0].Pincode);
-
-
-        localStorage.setItem("wmessage", message)
-        $("#detail").append(gridtable)
-      }
-
-
-
-      var datatableclassnames = ".table-responsive-sm,.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate, table.dataTable tbody tr.oddrow, table.dataTable tbody tr.evenrow,.dataTables_filter input ,  .dataTables_length select, .page-item.active .page-link, body,.modal-header,  .modal-body,tbody tr.darkmode, .darkmode, #detail"
-
-      function handleDarkMode() {
-        if ($("#darkSwitch").prop('checked') == true) {
-          $(datatableclassnames).css({
-            "background-color": "black",
-            "color": "white",
-            "border-color": "white"
-          }
-          );
-        } else {
-          $(datatableclassnames).css({
-            "background-color": "white",
-            "color": "black",
-            "border-color": "black"
-          }
-          );
-        }
-      }
-    });
-  </script>
-
-
-  <script type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
-
-  <script type="text/javascript" src="/tncovidbeds-map/DarkMode/dark-mode-switch.min.js"></script>
+    <script type="text/javascript" src="/tncovidbeds-map/DarkMode/dark-mode-switch.min.js"></script>
 </body>
 
 
