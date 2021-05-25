@@ -13,7 +13,7 @@
       {{ hospitals[0].District.Name }}</span
     >
     <hospital-card
-      v-for="hospital in hospitals"
+      v-for="hospital in sortedHospitals"
       :key="hospital._id"
       :hospital="hospital"
       :type="type"
@@ -36,6 +36,37 @@ export default {
     },
   },
   computed: {
+    sortedHospitals() {
+      if (
+        this.hospitals !== undefined &&
+        this.hospitals !== null &&
+        this.hospitals.length > 0
+      ) {
+        const lHospital = this.hospitals
+        if (this.type === 'normal') {
+          return lHospital.sort(function (a, b) {
+            return (
+              b.CovidBedDetails.VaccantNonO2Beds -
+              a.CovidBedDetails.VaccantNonO2Beds
+            )
+          })
+        } else if (this.type === 'icu') {
+          return lHospital.sort(function (a, b) {
+            return (
+              b.CovidBedDetails.VaccantICUBeds -
+              a.CovidBedDetails.VaccantICUBeds
+            )
+          })
+        } else {
+          return lHospital.sort(function (a, b) {
+            return (
+              b.CovidBedDetails.VaccantO2Beds - a.CovidBedDetails.VaccantO2Beds
+            )
+          })
+        }
+      }
+      return null
+    },
     oxygenBedCount() {
       if (
         this.hospitals !== undefined &&

@@ -33,7 +33,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/aws.js'],
+  plugins: ['~/plugins/aws.js', '~/plugins/gtag.js'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -46,12 +46,6 @@ export default {
     '@nuxtjs/stylelint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
-    [
-      '@nuxtjs/google-analytics',
-      {
-        id: 'G-374819X2JW',
-      },
-    ],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

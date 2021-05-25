@@ -143,15 +143,17 @@ export default {
           }
         })
         const returnList = []
-        Object.keys(bedList).forEach((hospitalName) => {
-          returnList.push({
-            name: hospitalName,
-            id: bedList[hospitalName].id,
-            oxygen_beds: bedList[hospitalName].oxygen_beds,
-            non_oxygen_beds: bedList[hospitalName].non_oxygen_beds,
-            icu_beds: bedList[hospitalName].icu_beds,
+        Object.keys(bedList)
+          .sort()
+          .forEach((hospitalName) => {
+            returnList.push({
+              name: hospitalName,
+              id: bedList[hospitalName].id,
+              oxygen_beds: bedList[hospitalName].oxygen_beds,
+              non_oxygen_beds: bedList[hospitalName].non_oxygen_beds,
+              icu_beds: bedList[hospitalName].icu_beds,
+            })
           })
-        })
         return returnList
       }
       return null
