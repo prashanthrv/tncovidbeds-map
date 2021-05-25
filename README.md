@@ -1,4 +1,4 @@
-# TN Covid Beds
+# tncovidbeds-map
 
 ## Find beds near you
 

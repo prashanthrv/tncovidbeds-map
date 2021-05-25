@@ -4,11 +4,13 @@ export const state = () => ({
   showBackIcon: false,
   hospitalList: [],
   backToLink: null,
+  upTime: null,
 })
 
 export const mutations = {
-  updateHospitals(state, hospitals) {
+  updateHospitals(state, { hospitals, upTime }) {
     state.hospitalList = hospitals
+    state.upTime = upTime
   },
   setBackLink(state, link) {
     if (link !== undefined && link !== null && link !== '') {
@@ -56,11 +58,13 @@ const getHospitals = async function (self, tableName, data, startKey, commit) {
         return rdata
       } else {
         let hospitals = []
+        let upTime = null
         data.forEach((element) => {
           const item = unmarshall(element)
           hospitals = hospitals.concat(item.data)
+          upTime = item.updateTime
         })
-        commit('updateHospitals', hospitals)
+        commit('updateHospitals', { hospitals, upTime })
       }
     }
   })

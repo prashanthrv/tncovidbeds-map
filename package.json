@@ -23,7 +23,8 @@
     "js-cookie": "^2.2.1",
     "leaflet": "^1.7.1",
     "nuxt": "^2.15.3",
-    "vue-gtag": "^1.16.1"
+    "vue-gtag": "^1.16.1",
+    "vue2-timeago": "2.0.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^6.0.0",

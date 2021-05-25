@@ -95,6 +95,9 @@ export default {
   fetch() {
     this.$store.dispatch('setBackLink', null)
   },
+  head: {
+    title: 'TN Covid Beds',
+  },
   methods: {
     searchQuery() {
       if (

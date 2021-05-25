@@ -26,13 +26,22 @@
         Data Sourced from
         <a href="https://tncovidbeds.tnega.org/" target="_blank">TNEGA</a>
       </span>
+      <span
+        v-if="$store.state.hospitalList && upTime"
+        class="text-caption ml-auto"
+        >Last Updated:<time-ago :datetime="upTime" long></time-ago
+      ></span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-// import Cookies from 'js-cookies'
+import { TimeAgo } from 'vue2-timeago'
+
 export default {
+  components: {
+    TimeAgo,
+  },
   data() {
     return {
       clipped: false,
@@ -56,6 +65,15 @@ export default {
     },
     backToLink() {
       return this.$store.state.backToLink
+    },
+    upTime() {
+      if (
+        this.$store.state.upTime !== undefined &&
+        this.$store.state.upTime !== null
+      ) {
+        return this.$store.state.upTime
+      }
+      return null
     },
   },
 }
