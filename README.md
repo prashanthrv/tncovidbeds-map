@@ -1,6 +1,6 @@
-# tncovidbeds-map
+# TN Covid Beds
 
-## Build Setup
+## Find beds near you
 
 ```bash
 # install dependencies

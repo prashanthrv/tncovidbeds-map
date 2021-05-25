@@ -61,7 +61,7 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-row class="d-flex flex-column">
+    <v-row class="d-flex flex-column mt-6">
       <div class="font-weight-bold">Beds Availability</div>
       <div class="d-flex justify-space-between font-weight-bold">
         <v-col class="text-center d-flex flex-column">
