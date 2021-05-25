@@ -1,0 +1,67 @@
+import { unmarshall } from '@aws-sdk/util-dynamodb'
+
+export const state = () => ({
+  showBackIcon: false,
+  hospitalList: [],
+  backToLink: null,
+})
+
+export const mutations = {
+  updateHospitals(state, hospitals) {
+    state.hospitalList = hospitals
+  },
+  setBackLink(state, link) {
+    if (link !== undefined && link !== null && link !== '') {
+      state.backToLink = link
+      state.showBackIcon = true
+    } else {
+      state.backToLink = null
+      state.showBackIcon = false
+    }
+  },
+}
+
+export const actions = {
+  async fetchHospitals({ commit }) {
+    const self = this
+    await getHospitals(self, 'tn_hospital_all', [], null, commit)
+  },
+  setBackLink({ commit }, link) {
+    commit('setBackLink', link)
+  },
+}
+
+const getHospitals = async function (self, tableName, data, startKey, commit) {
+  const config = { TableName: tableName }
+  if (startKey !== undefined && startKey !== null) {
+    config.ExclusiveStartKey = startKey
+  }
+  await self.$dbClient.scan(config, async function (err, dbdata) {
+    if (err) {
+      console.log(err)
+      return data
+    } else {
+      data = data.concat(dbdata.Items)
+      if (
+        dbdata.LastEvaluatedKey !== undefined &&
+        dbdata.LastEvaluatedKey !== null
+      ) {
+        const rdata = await getHospitals(
+          self,
+          tableName,
+          data,
+          dbdata.LastEvaluatedKey,
+          commit
+        )
+        return rdata
+      } else {
+        let hospitals = []
+        data.forEach((element) => {
+          const item = unmarshall(element)
+          hospitals = hospitals.concat(item.data)
+        })
+        commit('updateHospitals', hospitals)
+      }
+    }
+  })
+}
