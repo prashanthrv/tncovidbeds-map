@@ -1,5 +1,5 @@
 <template>
-  <v-container class="px-6">
+  <v-container class="px-6" style="height: 100%">
     <v-row class="mt-2 d-flex flex-nowrap">
       <v-text-field
         v-model="searchText"

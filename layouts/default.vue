@@ -23,8 +23,7 @@
     </v-main>
     <v-footer :absolute="!fixed" app>
       <span class="text-caption">
-        Data Sourced from
-        <a href="https://tncovidbeds.tnega.org/" target="_blank">TNEGA</a>
+        <a href="/terms" target="_blank">Read our terms</a>
       </span>
       <span
         v-if="$store.state.hospitalList && upTime"

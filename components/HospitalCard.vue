@@ -15,7 +15,7 @@
           {{ hospital.District.Name }}
         </div>
         <div class="mt-auto text-caption grey--text">
-          Last Update: {{ lastUpdated }}
+          Last Update: <time-ago :datetime="lastUpdated" long></time-ago>
         </div>
         <!-- <v-row>
           <v-col v-if="landline" cols="3">
@@ -139,7 +139,12 @@
   </v-card>
 </template>
 <script>
+import { TimeAgo } from 'vue2-timeago'
+
 export default {
+  components: {
+    TimeAgo,
+  },
   props: {
     hospital: {
       type: Object,
@@ -158,7 +163,7 @@ export default {
         this.hospital.UpdatedDateTime !== undefined &&
         this.hospital.UpdatedDateTime !== null
       ) {
-        return new Date(this.hospital.UpdatedDateTime * 1000).toLocaleString()
+        return new Date(this.hospital.UpdatedDateTime * 1000)
       }
       return null
     },
