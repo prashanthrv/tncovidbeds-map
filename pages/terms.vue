@@ -83,21 +83,6 @@
         beyond fair use, You must obtain permission from the copyright owner.
       </p>
 
-      <h4>No Responsibility Disclaimer</h4>
-      <p>
-        The information on the Service is provided with the understanding that
-        the Company is not herein engaged in rendering legal, accounting, tax,
-        or other professional advice and services. As such, it should not be
-        used as a substitute for consultation with professional accounting, tax,
-        legal or other competent advisers.
-      </p>
-      <p>
-        In no event shall the Company or its suppliers be liable for any
-        special, incidental, indirect, or consequential damages whatsoever
-        arising out of or in connection with your access or use or inability to
-        access or use the Service.
-      </p>
-
       <h4>"Use at Your Own Risk" Disclaimer</h4>
       <p>
         All information in the Service is provided "as is", with no guarantee of
